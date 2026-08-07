@@ -1,3 +1,8 @@
+export { accessLog } from "./lib/access-log.js";
+export type {
+  AccessLogEntry,
+  AccessLogOptions,
+} from "./lib/access-log.js";
 export { cors } from "./lib/cors.js";
 export type { CorsOptions } from "./lib/cors.js";
 export {

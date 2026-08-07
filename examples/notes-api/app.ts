@@ -10,7 +10,12 @@ import {
   offsetPageSchema,
   problemSchema,
 } from "@zwents/schema";
-import { cors, requestId, securityHeaders } from "@zwents/security";
+import {
+  accessLog,
+  cors,
+  requestId,
+  securityHeaders,
+} from "@zwents/security";
 import { z } from "zod";
 import { buildContainer, type AppServices } from "./lib/container.js";
 
@@ -37,6 +42,12 @@ export function createNotesApp(services: AppServices = buildContainer()) {
     onStop: [() => services.db.close()],
   })
     .use(requestId())
+    .use(
+      accessLog({
+        skip: (ctx) =>
+          ctx.req.path === "/health" || ctx.req.path === "/ready",
+      }),
+    )
     .use(
       securityHeaders({
         // Example runs on http:// locally

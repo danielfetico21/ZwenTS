@@ -1,7 +1,7 @@
 {
   "name": "@zwents/security",
   "version": "0.1.0",
-  "description": "CORS, security headers, and request-id middleware for ZwenTS",
+  "description": "CORS, security headers, request-id, and access-log middleware for ZwenTS",
   "type": "module",
   "exports": {
     ".": {
