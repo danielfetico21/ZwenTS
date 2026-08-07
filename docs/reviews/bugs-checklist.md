@@ -1,6 +1,18 @@
 # Bugs checklist (known / suspected)
 
+Living list for **zwents-audit** / **zwents-verify**. Prioritize open rows before new hunts.
+
 Updated after Low-fix pass → see [`review-summary.md`](./review-summary.md).
+
+## How to add a row
+
+| Column | Values |
+|--------|--------|
+| ID | `C#` next free |
+| Status | `suspected` / `confirmed` / `fixed` / `verified OK` / `ops` / `partial` / `wontfix` |
+| Area | package or example |
+
+After a deep audit, set status and link the `review-*.md` finding.
 
 | ID | Area | Suspicion | Status |
 |----|------|-----------|--------|
@@ -18,6 +30,9 @@ Updated after Low-fix pass → see [`review-summary.md`](./review-summary.md).
 | C12 | Examples `notes-api` | Authz ownership, idempotency, demo auth | **fixed** |
 | C13 | Multi-instance | In-memory stores vs shared deploy | **ops** (not a code bug) |
 | C14 | OTEL | Global provider pollution in tests | **partial** (API limit) |
+| C15 | `@zwents/http` SSE | Cancel/abort + field CR/LF injection | **fixed** |
+| C16 | `@zwents/otel` metrics | Raw pathname cardinality on `http.route` | **fixed** (matched template) |
+| C17 | accessLog / otel metrics | Status `0` on non-AppError; sink throw masks | **fixed** |
 
 ## Skipped Low
 
