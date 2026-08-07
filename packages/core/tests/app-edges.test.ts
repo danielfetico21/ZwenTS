@@ -13,13 +13,14 @@ import {
   type Middleware,
 } from "../index.js";
 
+const passThroughMw: Middleware = async (_ctx, next) => {
+  await next();
+};
+
 describe("createApp getters and hooks", () => {
   it("exposes registered middleware for OpenAPI discovery", () => {
-    const mw: Middleware = async (_ctx, next) => {
-      await next();
-    };
-    const app = createApp({ context: {} }).use(mw);
-    expect(app.middleware).toEqual([mw]);
+    const app = createApp({ context: {} }).use(passThroughMw);
+    expect(app.middleware).toEqual([passThroughMw]);
   });
 
   it("exposes compiled route definitions via routes getter", () => {

@@ -20,7 +20,7 @@ function run(cmd, args, cwd = root) {
 const names = readdirSync(packagesDir, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .map((d) => d.name)
-  .sort();
+  .toSorted();
 
 if (names.length === 0) {
   console.error("No packages found under packages/");
@@ -45,7 +45,7 @@ for (const name of names) {
 
 const tarballs = readdirSync(packsDir)
   .filter((f) => f.endsWith(".tgz"))
-  .sort();
+  .toSorted();
 
 console.log("\nPacked into .packs/:");
 for (const f of tarballs) {

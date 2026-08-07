@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { sanitizeIdent, uniqueIdent } from "../lib/idents.js";
 import {
   inlineLocalRefs,
   localDefs,
   normalizeComponentRef,
   rewriteSchemaRefs,
-} from "../lib/json-schema.js";
+  sanitizeIdent,
+  uniqueIdent,
+} from "../index.js";
 
 describe("idents", () => {
   it("sanitizeIdent strips junk, rejects empty, and prefixes leading digits", () => {

@@ -8,6 +8,10 @@ import {
   withSecurityMeta,
 } from "../index.js";
 
+async function noopHandler() {
+  return undefined;
+}
+
 describe("bearerAuth edges", () => {
   it("allows missing token when required is false", async () => {
     const app = createApp({ context: {} })
@@ -312,8 +316,7 @@ describe("security-meta", () => {
   });
 
   it("attaches and reads meta via withSecurityMeta", () => {
-    const fn = async () => undefined;
-    const tagged = withSecurityMeta(fn, {
+    const tagged = withSecurityMeta(noopHandler, {
       require: [{ bearerAuth: [] }],
     });
     expect(getSecurityMeta(tagged)).toEqual({
