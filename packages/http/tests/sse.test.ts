@@ -102,7 +102,7 @@ describe("SSE", () => {
   });
 
   it("cancel stops the async iterable via return()", async () => {
-    const returned = vi.fn();
+    const returned = vi.fn<() => void>();
     const source: AsyncIterable<{ data: string }> = {
       [Symbol.asyncIterator]() {
         let n = 0;

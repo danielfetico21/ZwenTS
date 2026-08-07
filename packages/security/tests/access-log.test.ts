@@ -1,10 +1,21 @@
 import { describe, expect, it, vi } from "vitest";
-import { appError, createApp, ErrorCodes } from "@zwents/core";
-import { accessLog } from "../index.js";
+import {
+  appError,
+  createApp,
+  ErrorCodes,
+  type RequestContext,
+} from "@zwents/core";
+import { accessLog, type AccessLogEntry } from "../index.js";
+
+type LogFn = (entry: AccessLogEntry, ctx: RequestContext) => void;
+type LoggerFn = (
+  message: string,
+  bindings?: Record<string, unknown>,
+) => void;
 
 describe("accessLog", () => {
   it("logs method path status duration and requestId on success", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log }))
       .route({
@@ -30,7 +41,7 @@ describe("accessLog", () => {
   });
 
   it("logs error status after handler failure", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log }))
       .route({
@@ -51,7 +62,7 @@ describe("accessLog", () => {
   });
 
   it("skips when skip predicate matches", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log, skip: (ctx) => ctx.req.path === "/health" }))
       .route({
@@ -65,16 +76,16 @@ describe("accessLog", () => {
   });
 
   it("uses ctx.logger.info by default", async () => {
-    const info = vi.fn();
+    const info = vi.fn<LoggerFn>();
     const app = createApp({
       context: {},
     })
       .use(async (ctx, next) => {
         ctx.logger = {
-          debug: vi.fn(),
+          debug: vi.fn<LoggerFn>(),
           info,
-          warn: vi.fn(),
-          error: vi.fn(),
+          warn: vi.fn<LoggerFn>(),
+          error: vi.fn<LoggerFn>(),
           child: () => ctx.logger,
         };
         await next();
@@ -94,7 +105,7 @@ describe("accessLog", () => {
   });
 
   it("logs when skip returns false", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log, skip: () => false }))
       .route({
@@ -108,7 +119,7 @@ describe("accessLog", () => {
   });
 
   it("logs status 500 for non-AppError throws", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log }))
       .route({
@@ -128,7 +139,7 @@ describe("accessLog", () => {
   });
 
   it("custom log receives ctx as second argument", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log }))
       .route({
@@ -142,7 +153,7 @@ describe("accessLog", () => {
   });
 
   it("logs status 0 when next returns without response or throw", async () => {
-    const log = vi.fn();
+    const log = vi.fn<LogFn>();
     const app = createApp({ context: {} })
       .use(accessLog({ log }))
       .use(async () => {
@@ -175,4 +186,3 @@ describe("accessLog", () => {
     expect(res.status).toBe(404);
   });
 });
-

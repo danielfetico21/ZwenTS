@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   metrics,
+  type Attributes,
   type Counter,
   type Histogram,
   type Meter,
@@ -8,17 +9,20 @@ import {
 import { appError, createApp, ErrorCodes } from "@zwents/core";
 import { otelHttpMetrics } from "../index.js";
 
+type AddFn = (value: number, attributes?: Attributes) => void;
+type RecordFn = (value: number, attributes?: Attributes) => void;
+
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
 function mockMeter(): {
-  add: ReturnType<typeof vi.fn>;
-  record: ReturnType<typeof vi.fn>;
+  add: ReturnType<typeof vi.fn<AddFn>>;
+  record: ReturnType<typeof vi.fn<RecordFn>>;
   getMeter: ReturnType<typeof vi.spyOn>;
 } {
-  const add = vi.fn();
-  const record = vi.fn();
+  const add = vi.fn<AddFn>();
+  const record = vi.fn<RecordFn>();
   const meter = {
     createCounter: () => ({ add }) as unknown as Counter,
     createHistogram: () => ({ record }) as unknown as Histogram,
@@ -48,7 +52,7 @@ describe("otelHttpMetrics", () => {
       "http.route": "/notes/:id",
       "http.response.status_code": 200,
     });
-    expect(add.mock.calls[0]?.[1]["http.route"]).not.toBe("/notes/abc");
+    expect(add.mock.calls[0]?.[1]?.["http.route"]).not.toBe("/notes/abc");
   });
 
   it("omits http.route when no route matched", async () => {
@@ -131,10 +135,10 @@ describe("otelHttpMetrics", () => {
   });
 
   it("does not mask handler errors when metric sink throws", async () => {
-    const add = vi.fn(() => {
+    const add = vi.fn<AddFn>(() => {
       throw new Error("sink");
     });
-    const record = vi.fn();
+    const record = vi.fn<RecordFn>();
     const meter = {
       createCounter: () => ({ add }) as unknown as Counter,
       createHistogram: () => ({ record }) as unknown as Histogram,

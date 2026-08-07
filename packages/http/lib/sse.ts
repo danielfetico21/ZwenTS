@@ -65,24 +65,25 @@ function streamFromIterable(
   source: AsyncIterable<SseEvent>,
 ): ReadableStream<Uint8Array> {
   let iterator: AsyncIterator<SseEvent> | undefined;
-  let cancelled = false;
+  // Object so cancel() mutations are visible to the start() loop (and oxlint).
+  const state = { cancelled: false };
 
   return new ReadableStream<Uint8Array>({
     async start(controller) {
       iterator = source[Symbol.asyncIterator]();
       try {
-        while (!cancelled) {
+        while (!state.cancelled) {
           const next = await iterator.next();
-          if (next.done || cancelled) break;
+          if (next.done || state.cancelled) break;
           controller.enqueue(encoder.encode(encodeSseEvent(next.value)));
         }
-        if (!cancelled) controller.close();
+        if (!state.cancelled) controller.close();
       } catch (error) {
-        if (!cancelled) controller.error(error);
+        if (!state.cancelled) controller.error(error);
       }
     },
     async cancel() {
-      cancelled = true;
+      state.cancelled = true;
       try {
         await iterator?.return?.();
       } catch {
