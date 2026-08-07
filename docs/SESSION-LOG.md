@@ -54,12 +54,16 @@ Living checklist for ZwenTS implementation progress.
 - [x] Example time-tracking (Clockify-like) — [`examples/time-tracking`](../examples/time-tracking) API + Tailwind UI on `:3040`
 - [x] Production Phase 2 backlog (→ 0.1.0) — [TODO-production.md](./TODO-production.md) must #11–17 / should #18–22 / later #23–27; no ORM package
 - [x] Phase 2 must #11–17 — packages `0.1.0`, Changesets + [publish.md](./publish.md), CHANGELOG, auth/health/db/deploy recipes, client `ClientError`, notes-api `/health`+/`/ready`, docs site pages
+- [x] Phase 2 should #18–22 — Redis store recipe, `accessLog`, multipart stream (confirmed), client 201/202 + MVP docs, [security-checklist.md](./security-checklist.md)
+- [x] Phase 2 later #23–27 — `otelHttpMetrics`, SSE (`sseResponse`; WS deferred), docs pages, `ResultAsync`/`safeTry`/`mapAsync`/`andThenAsync`, wire-infer deferred doc
+- [x] Verify skills — `zwents-conventions` + `zwents-verify` (3-agent gate); [verify-prompt.md](./verify-prompt.md)
+- [x] Audit skill — `zwents-audit` (bugs / Prompt A API / Prompt B resilience) adapted from Claude verify prompts; bugs-checklist how-to
 
 ## Still open (future)
 
-- [ ] Phase 2 should #18–22 — see [TODO-production.md](./TODO-production.md)
-- [ ] Wire: infer deps from TypeScript parameter types (Phase 2 #27)
-- [ ] `ResultAsync` / `safeTry` (deferred from RFC 0006; Phase 2 #26)
+- [ ] Generator `safeTry` / method-chaining `ResultAsync` class (beyond thin helpers)
+- [ ] Wire: infer deps from TypeScript parameter types (implementation — see [wire-infer.md](./wire-infer.md))
+- [ ] First-class WebSocket adapter (SSE covers one-way streams)
 
 ## Verify
 

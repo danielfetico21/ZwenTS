@@ -43,21 +43,21 @@ Ordered backlog for stable public APIs. Work **one item at a time** with edge-ca
 
 | # | Item | Package / place | Status |
 |---|------|-----------------|--------|
-| 18 | Redis-backed stores — adapters/docs for ratelimit + idempotency | docs / examples | todo |
-| 19 | Request logging middleware — structured access log (method, path, status, duration, requestId) | package or recipe on `Logger` | todo |
-| 20 | Multipart size enforce on stream (not only `Content-Length`) | `@zwents/http` | todo |
-| 21 | OpenAPI/client parity — cheap non-200 typed responses; document remaining MVP gaps | `@zwents/openapi` + docs | todo |
-| 22 | Security defaults checklist — CORS allowlist in examples, CSP notes for HTML demos, `trustProxy` docs | docs + examples | todo |
+| 18 | Redis-backed stores — adapters/docs for ratelimit + idempotency | docs / examples | done |
+| 19 | Request logging middleware — structured access log (method, path, status, duration, requestId) | package or recipe on `Logger` | done |
+| 20 | Multipart size enforce on stream (not only `Content-Length`) | `@zwents/http` | done |
+| 21 | OpenAPI/client parity — cheap non-200 typed responses; document remaining MVP gaps | `@zwents/openapi` + docs | done |
+| 22 | Security defaults checklist — CORS allowlist in examples, CSP notes for HTML demos, `trustProxy` docs | docs + examples | done |
 
 ### Later / nice (post-0.1.0)
 
 | # | Item | Package / place | Status |
 |---|------|-----------------|--------|
-| 23 | Metrics (Prometheus / OTEL metrics) alongside existing traces | `@zwents/otel` or recipe | todo |
-| 24 | WebSocket / SSE adapters | `@zwents/http` or separate | todo |
-| 25 | Nest-level docs + more examples | `apps/docs` / `examples` | todo |
-| 26 | `ResultAsync` / `safeTry` | `@zwents/core` (deferred RFC 0006) | todo |
-| 27 | Wire: infer deps from TypeScript parameter types | `@zwents/cli` wire | todo |
+| 23 | Metrics (Prometheus / OTEL metrics) alongside existing traces | `@zwents/otel` or recipe | done |
+| 24 | WebSocket / SSE adapters | `@zwents/http` or separate | done |
+| 25 | Nest-level docs + more examples | `apps/docs` / `examples` | done |
+| 26 | `ResultAsync` / `safeTry` | `@zwents/core` (deferred RFC 0006) | done |
+| 27 | Wire: infer deps from TS params — deferred; documented in [wire-infer.md](./wire-infer.md) | `@zwents/cli` wire | done (deferred) |
 
 ### Explicit out of scope
 

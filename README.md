@@ -35,8 +35,8 @@ pnpm pack:local # tarballs → .packs/ for consumer smoke
 | `@zwents/test` | `startTestApp` HTTP test helper |
 | `@zwents/cli` | `zwen` — `routes` / `openapi` / `client` / `check` |
 | `@zwents/auth` | Bearer auth + `authorize` / `requireAuth` |
-| `@zwents/otel` | `otelHttp()` — OpenTelemetry spans (API peer) |
-| `@zwents/security` | CORS, security headers, request-id |
+| `@zwents/otel` | `otelHttp()` / `otelHttpMetrics()` — OpenTelemetry (API peer) |
+| `@zwents/security` | CORS, security headers, request-id, access-log |
 | `@zwents/ratelimit` | Fixed-window rate limit |
 | `@zwents/idempotency` | `Idempotency-Key` middleware |
 | `@zwents/oxlint-plugin` | Framework lint rules |
