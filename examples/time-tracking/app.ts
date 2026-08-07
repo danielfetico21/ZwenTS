@@ -69,8 +69,12 @@ export function createTimeTrackingApp(
     )
     .use(
       cors({
-        // Reflect browser Origin for local demos / separate UIs
-        origin: () => true,
+        // Same-origin UI + explicit local allowlist (not reflect-all)
+        origin: [
+          `http://${config.HOST}:${config.PORT}`,
+          "http://127.0.0.1:3040",
+          "http://localhost:3040",
+        ],
         credentials: true,
       }),
     )

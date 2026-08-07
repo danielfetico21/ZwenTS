@@ -13,7 +13,8 @@ Minimum checklist for running a ZwenTS app in production.
 
 - Fail-fast env via `@zwents/config` `loadConfig`
 - Never enable `ALLOW_DEMO_AUTH` outside local demos
-- CORS: explicit origin allowlist (not reflect-all)
+- CORS: explicit origin allowlist (not reflect-all) — [security-checklist.md](./security-checklist.md)
+- Multi-instance: Redis stores — [redis-stores-recipe.md](./redis-stores-recipe.md)
 
 ## Process model
 

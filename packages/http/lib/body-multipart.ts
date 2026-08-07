@@ -28,7 +28,8 @@ const DEFAULT_MAX_FIELDS = 64;
 
 /**
  * Parse `multipart/form-data` into string fields + file parts.
- * Enforces Content-Length and per-file / file-count limits.
+ * Enforces total size via streamed byte cap (`readBytesLimited` — not
+ * Content-Length alone), plus per-file / field / count limits.
  */
 export async function readMultipartBody(
   request: Request,
