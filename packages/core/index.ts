@@ -50,8 +50,10 @@ export type {
 } from "./lib/app.js";
 export {
   DISPATCH_INPUT_STATE_KEY,
+  MATCHED_ROUTE_STATE_KEY,
   createApp,
   getDispatchInput,
+  getMatchedRoutePath,
   json,
   mergeResponseHeaders,
   problemJson,

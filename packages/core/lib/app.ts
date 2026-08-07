@@ -47,6 +47,9 @@ export type AppOptions<S> = {
 /** State key for adapter-parsed dispatch input (body/query/raw/files). */
 export const DISPATCH_INPUT_STATE_KEY = "@zwents/dispatchInput" as const;
 
+/** State key for the matched route path template (e.g. `/notes/:id`). */
+export const MATCHED_ROUTE_STATE_KEY = "@zwents/matchedRoute" as const;
+
 export type DispatchRequest = {
   method: string;
   path: string;
@@ -66,6 +69,14 @@ export function getDispatchInput(
     return undefined;
   }
   return value as DispatchInput;
+}
+
+/** Matched route path template when a route matched (low-cardinality). */
+export function getMatchedRoutePath(
+  ctx: RequestContext,
+): string | undefined {
+  const value = ctx.state.get(MATCHED_ROUTE_STATE_KEY);
+  return typeof value === "string" ? value : undefined;
 }
 
 export type App<S = unknown> = {
@@ -165,6 +176,9 @@ export function createApp<S>(options: AppOptions<S>): App<S> {
       ctx.state.set(DISPATCH_INPUT_STATE_KEY, request.input);
 
       const match = matchRoute(compiledRoutes, request.method, request.path);
+      if (match) {
+        ctx.state.set(MATCHED_ROUTE_STATE_KEY, match.route.path);
+      }
       const routeMiddleware = match?.route.middleware ?? [];
       const pipeline = composeMiddleware<S>([
         ...appMiddleware,

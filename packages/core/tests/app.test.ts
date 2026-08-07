@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   AppError,
   createApp,
+  getMatchedRoutePath,
   json,
   type Middleware,
 } from "../index.js";
@@ -92,6 +93,21 @@ describe("createApp", () => {
     const res = await app.dispatch({ method: "GET", path: "/missing" });
     expect(res.status).toBe(404);
     expect(res.body).toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("exposes matched route path template on context state", async () => {
+    let seen: string | undefined;
+    const app = createApp({ context: {} }).route({
+      method: "GET",
+      path: "/notes/:id",
+      handler: async (ctx) => {
+        seen = getMatchedRoutePath(ctx);
+        return { ok: true };
+      },
+    });
+
+    await app.dispatch({ method: "GET", path: "/notes/abc" });
+    expect(seen).toBe("/notes/:id");
   });
 
   it("runs start hooks in order and stop hooks in reverse", async () => {
