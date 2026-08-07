@@ -108,7 +108,9 @@ Security schemes from `@zwents/auth` middleware metadata land in `components.sec
 
 ### 4.2 Client codegen
 
-`generateFetchClient(doc)` / `zwen client` emit a typed `fetch` wrapper: exported types from `components.schemas`, typed path params, typed query params (`URLSearchParams`; no `style`/`explode`), typed JSON bodies, and typed 200 JSON responses. On `!res.ok` the client throws `ClientError` with `status` and optional `problem` when the response body is Problem Details JSON (not server `AppError`).
+`generateFetchClient(doc)` / `zwen client` emit a typed `fetch` wrapper: exported types from `components.schemas`, typed path params, typed query params (`URLSearchParams`; no `style`/`explode`), typed JSON bodies, and typed success JSON from **200 / 201 / 202** (first present). On `!res.ok` the client throws `ClientError` with `status` and optional `problem` when the body is Problem Details JSON (not server `AppError`).
+
+**Still MVP / out of scope for the client:** OpenAPI `style`/`explode`, typed non-2xx success unions, and automatic parsing of every documented error schema into distinct TypeScript types (errors remain `ClientError` + optional `problem`).
 
 ## 5. Tooling
 

@@ -46,4 +46,4 @@ Prefer **unix milliseconds** in JSON bodies. HTTP rate-limit reset headers stay 
 
 ## Generated fetch client (MVP)
 
-`generateFetchClient` / `zwen client` throw `ClientError` on non-OK responses (`status` + optional `problem` when the body is Problem Details JSON). This is not the same class as server-side `AppError`.
+`generateFetchClient` / `zwen client` type success JSON from 200/201/202 and throw `ClientError` on non-OK (`status` + optional `problem`). Not the same as server `AppError`. Remaining MVP gaps: `style`/`explode`, typed error-schema unions — see [RFC 0003 §4.2](./rfcs/0003-route-openapi.md).

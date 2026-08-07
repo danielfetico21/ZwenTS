@@ -279,7 +279,14 @@ function successResponseSchema(
   const responses = operation["responses"] as
     | Record<string, { content?: Record<string, { schema?: JsonSchema }> }>
     | undefined;
-  return responses?.["200"]?.content?.["application/json"]?.schema;
+  // Prefer 200, then 201, then 202. When multiple exist, the client return
+  // type is a single schema (MVP) — document both responses in OpenAPI but
+  // generate the primary (usually 200) type.
+  for (const code of ["200", "201", "202"]) {
+    const schema = responses?.[code]?.content?.["application/json"]?.schema;
+    if (schema) return schema;
+  }
+  return undefined;
 }
 
 function emitSchemaType(

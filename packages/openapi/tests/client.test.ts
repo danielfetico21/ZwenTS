@@ -267,4 +267,94 @@ describe("generateFetchClient schema edges", () => {
     );
     expect(source).toContain("Promise<unknown>");
   });
+
+  it("types success JSON from 201 when 200 is absent", () => {
+    const source = generateFetchClient(
+      docWithPaths({
+        "/items": {
+          post: {
+            responses: {
+              "201": {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: { id: { type: "string" } },
+                      required: ["id"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+    );
+    expect(source).toContain("Promise<postItemsResponse>");
+    expect(source).toContain("export type postItemsResponse");
+  });
+
+  it("prefers 200 schema over 201 when both exist", () => {
+    const source = generateFetchClient(
+      docWithPaths({
+        "/items": {
+          post: {
+            responses: {
+              "200": {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: { ok: { type: "boolean" } },
+                      required: ["ok"],
+                    },
+                  },
+                },
+              },
+              "201": {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: { id: { type: "string" } },
+                      required: ["id"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+    );
+    expect(source).toContain("ok: boolean");
+    expect(source).not.toContain("id: string");
+  });
+
+  it("types success JSON from 202 when 200/201 absent", () => {
+    const source = generateFetchClient(
+      docWithPaths({
+        "/jobs": {
+          post: {
+            responses: {
+              "202": {
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: { jobId: { type: "string" } },
+                      required: ["jobId"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+    );
+    expect(source).toContain("jobId: string");
+  });
 });
+
+
