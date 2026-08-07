@@ -84,6 +84,12 @@ export {
   unwrapOr,
   unwrapOrThrow,
 } from "./lib/result.js";
+export type { ResultAsync } from "./lib/result-async.js";
+export {
+  andThenAsync,
+  mapAsync,
+  safeTry,
+} from "./lib/result-async.js";
 export {
   resultToResponse,
   unwrapHandlerResult,

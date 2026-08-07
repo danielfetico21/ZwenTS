@@ -42,7 +42,9 @@ Values are created with `ok` / `err` and carry a private brand so domain JSON sh
 | `unwrapHandlerResult(value)` | used by `createApp` dispatch |
 | Handler returns `Result` | success value is serialized; error is thrown into `onError` |
 
-Deferred: full `ResultAsync` class, `safeTry` generators, `Option`.
+Shipped (thin): `ResultAsync` type alias, `mapAsync`, `andThenAsync`, `safeTry` (async block — not generator `yield*`).
+
+Still deferred: method-chaining `ResultAsync` class, generator `safeTry`, `Option`.
 
 ## 4. Handler convention
 

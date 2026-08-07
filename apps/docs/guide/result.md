@@ -24,6 +24,8 @@ RFC 0006 keeps neverthrow-style aliases:
 | `tap` | `andTee` |
 | `unwrapOrThrow` | `toThrowable` (deprecated) |
 
+Async helpers: `ResultAsync` (= `Promise<Result>`), `mapAsync`, `andThenAsync`, `safeTry` (async block; not generator `yield*`).
+
 Don't drop aliases — they're part of the public surface.
 
 More: [Result recipe](/recipes/result) (same content as repo `docs/result-recipe.md`).
