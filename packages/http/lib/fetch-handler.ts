@@ -49,6 +49,20 @@ function toWebResponse(result: AppResponse): Response {
     return new Response(result.body, { status: result.status, headers });
   }
 
+  // Streams / binary (SSE, files) — pass through without JSON.stringify.
+  if (
+    typeof ReadableStream !== "undefined" &&
+    result.body instanceof ReadableStream
+  ) {
+    return new Response(result.body, { status: result.status, headers });
+  }
+  if (result.body instanceof Uint8Array) {
+    return new Response(result.body, { status: result.status, headers });
+  }
+  if (result.body instanceof ArrayBuffer) {
+    return new Response(result.body, { status: result.status, headers });
+  }
+
   return new Response(JSON.stringify(result.body), {
     status: result.status,
     headers,

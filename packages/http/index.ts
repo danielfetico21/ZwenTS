@@ -29,3 +29,5 @@ export type {
   FatalErrorKind,
   InstallProcessSignalsOptions,
 } from "./lib/shutdown.js";
+export { encodeSseEvent, sseResponse } from "./lib/sse.js";
+export type { SseEvent } from "./lib/sse.js";
