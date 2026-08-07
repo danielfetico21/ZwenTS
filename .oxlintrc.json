@@ -18,6 +18,14 @@
     "zwents/no-decorators": "error",
     "zwents/require-route-output": "warn"
   },
+  "overrides": [
+    {
+      "files": ["**/tests/**/*.ts", "**/*.test.ts"],
+      "rules": {
+        "zwents/require-route-output": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     "**/dist/**",
     "**/*.gen.ts",
