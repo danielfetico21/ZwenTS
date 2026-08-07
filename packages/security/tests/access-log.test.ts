@@ -141,6 +141,19 @@ describe("accessLog", () => {
     expect(log.mock.calls[0]?.[1]).toMatchObject({ requestId: "r-ctx" });
   });
 
+  it("logs status 0 when next returns without response or throw", async () => {
+    const log = vi.fn();
+    const app = createApp({ context: {} })
+      .use(accessLog({ log }))
+      .use(async () => {
+        // Intentionally neither respond nor call next.
+      });
+
+    const res = await app.dispatch({ method: "GET", path: "/" });
+    expect(res.status).toBe(204);
+    expect(log.mock.calls[0]?.[0]).toMatchObject({ status: 0, path: "/" });
+  });
+
   it("does not mask handler errors when log sink throws", async () => {
     const app = createApp({ context: {} })
       .use(

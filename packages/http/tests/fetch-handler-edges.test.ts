@@ -1,6 +1,6 @@
 import { createApp, json } from "@zwents/core";
 import { describe, expect, it } from "vitest";
-import { createFetchHandler } from "../index.js";
+import { createFetchHandler, toWebResponse } from "../index.js";
 
 describe("createFetchHandler response shaping", () => {
   it("sets application/json when body is object and content-type is missing", async () => {
@@ -47,5 +47,26 @@ describe("createFetchHandler response shaping", () => {
     const handler = createFetchHandler(app, { requestTimeoutMs: 0 });
     const res = await handler(new Request("http://127.0.0.1/text"));
     expect(await res.text()).toBe("hello");
+  });
+
+  it("passes Uint8Array and ArrayBuffer bodies through", async () => {
+    const bytes = new TextEncoder().encode("bin");
+    const fromBytes = toWebResponse({
+      status: 200,
+      headers: { "content-type": "application/octet-stream" },
+      body: bytes,
+    });
+    expect(new Uint8Array(await fromBytes.arrayBuffer())).toEqual(bytes);
+
+    const buffer = bytes.buffer.slice(
+      bytes.byteOffset,
+      bytes.byteOffset + bytes.byteLength,
+    );
+    const fromBuf = toWebResponse({
+      status: 200,
+      headers: { "content-type": "application/octet-stream" },
+      body: buffer,
+    });
+    expect(await fromBuf.text()).toBe("bin");
   });
 });

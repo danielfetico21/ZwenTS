@@ -2,8 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   AppError,
   createApp,
+  createRequestContext,
+  DISPATCH_INPUT_STATE_KEY,
   ErrorCodes,
+  getDispatchInput,
+  getMatchedRoutePath,
   json,
+  MATCHED_ROUTE_STATE_KEY,
   mergeResponseHeaders,
   type Middleware,
 } from "../index.js";
@@ -152,5 +157,49 @@ describe("mergeResponseHeaders", () => {
     );
     expect(merged.headers["x-request-id"]).toBe("abc");
     expect(merged.headers["content-type"]).toContain("application/json");
+  });
+
+  it("returns the same response when there are no headers to merge", () => {
+    const base = json({ ok: true });
+    expect(mergeResponseHeaders(base, {})).toBe(base);
+  });
+});
+
+describe("dispatch state helpers", () => {
+  it("getDispatchInput accepts objects and rejects null/array/primitives", () => {
+    const ctx = createRequestContext({
+      services: {},
+      method: "GET",
+      path: "/",
+    });
+    expect(getDispatchInput(ctx)).toBeUndefined();
+
+    ctx.state.set(DISPATCH_INPUT_STATE_KEY, null);
+    expect(getDispatchInput(ctx)).toBeUndefined();
+
+    ctx.state.set(DISPATCH_INPUT_STATE_KEY, ["x"]);
+    expect(getDispatchInput(ctx)).toBeUndefined();
+
+    ctx.state.set(DISPATCH_INPUT_STATE_KEY, "nope");
+    expect(getDispatchInput(ctx)).toBeUndefined();
+
+    const input = { body: { ok: true }, query: undefined };
+    ctx.state.set(DISPATCH_INPUT_STATE_KEY, input);
+    expect(getDispatchInput(ctx)).toEqual(input);
+  });
+
+  it("getMatchedRoutePath only returns string templates", () => {
+    const ctx = createRequestContext({
+      services: {},
+      method: "GET",
+      path: "/",
+    });
+    expect(getMatchedRoutePath(ctx)).toBeUndefined();
+
+    ctx.state.set(MATCHED_ROUTE_STATE_KEY, 42);
+    expect(getMatchedRoutePath(ctx)).toBeUndefined();
+
+    ctx.state.set(MATCHED_ROUTE_STATE_KEY, "/notes/:id");
+    expect(getMatchedRoutePath(ctx)).toBe("/notes/:id");
   });
 });

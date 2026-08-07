@@ -49,6 +49,22 @@ describe("requestId", () => {
     expect(res.body).toEqual({ id: "client-42" });
   });
 
+  it("generates a UUID when the client omits x-request-id", async () => {
+    const app = createApp({ context: {} })
+      .use(requestId())
+      .route({
+        method: "GET",
+        path: "/",
+        handler: async (ctx) => ({ id: ctx.requestId }),
+      });
+
+    const res = await app.dispatch({ method: "GET", path: "/" });
+    expect(res.headers["x-request-id"]).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    );
+    expect(res.body).toEqual({ id: res.headers["x-request-id"] });
+  });
+
   it("rejects CR/LF/NUL injection and oversized ids", async () => {
     const app = createApp({ context: {} })
       .use(requestId({ generate: () => "safe" }))

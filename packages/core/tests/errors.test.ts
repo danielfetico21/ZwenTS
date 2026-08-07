@@ -5,6 +5,7 @@ import {
   ErrorCodes,
   appError,
   problemJson,
+  problemResponse,
   problemTypeUri,
   sanitizeExtras,
   toProblemDetails,
@@ -54,6 +55,20 @@ describe("AppError", () => {
     const res = problemJson(details);
     expect(res.headers["content-type"]).toContain("application/problem+json");
     expect(res.status).toBe(404);
+  });
+
+  it("problemResponse builds Problem Details from an error code", () => {
+    const res = problemResponse(ErrorCodes.UNAUTHORIZED, "/login", {
+      detail: "missing token",
+    });
+    expect(res.status).toBe(401);
+    expect(res.headers["content-type"]).toContain("application/problem+json");
+    expect(res.body).toMatchObject({
+      code: "UNAUTHORIZED",
+      status: 401,
+      detail: "missing token",
+      instance: "/login",
+    });
   });
 
   it("does not serialize cause; strips stack/Error from extras", () => {

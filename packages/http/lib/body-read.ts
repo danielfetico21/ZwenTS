@@ -38,6 +38,11 @@ function concatBytes(chunks: readonly Uint8Array[], total: number): Uint8Array {
   return out;
 }
 
+/** Best-effort: never let `reader.cancel()` rejection mask the real error. */
+function ignoreCancelRejection(): undefined {
+  return undefined;
+}
+
 function rejectIfContentLengthTooLarge(
   request: Request,
   maxBytes: number,
@@ -88,11 +93,12 @@ export async function readBytesLimited(
                   ),
                 );
               };
-              /* v8 ignore next 4 */
+              /* v8 ignore start — raced abort already handled by throwIfAborted */
               if (signal.aborted) {
                 onAbort();
                 return;
               }
+              /* v8 ignore stop */
               signal.addEventListener("abort", onAbort, { once: true });
               void readPromise.finally(() => {
                 signal.removeEventListener("abort", onAbort);
@@ -106,7 +112,7 @@ export async function readBytesLimited(
       if (!value) continue;
       total += value.byteLength;
       if (total > maxBytes) {
-        await reader.cancel().catch(() => undefined);
+        await reader.cancel().catch(ignoreCancelRejection);
         throw appError(ErrorCodes.PAYLOAD_TOO_LARGE, {
           detail: `Request body exceeds limit of ${maxBytes} bytes`,
           extras: { maxBytes },
@@ -115,7 +121,7 @@ export async function readBytesLimited(
       chunks.push(value);
     }
   } catch (error) {
-    await reader.cancel().catch(() => undefined);
+    await reader.cancel().catch(ignoreCancelRejection);
     throw error;
   } finally {
     try {

@@ -121,6 +121,18 @@ export default defineWire({
     expect(() => topoSortProviders(graph.providers, [])).toThrow(/Circular dependency/);
   });
 
+  it("reports cycles even when providers also depend on seeds", () => {
+    expect(() =>
+      topoSortProviders(
+        [
+          { key: "a", factoryName: "createA", deps: ["b", "config"], line: 1 },
+          { key: "b", factoryName: "createB", deps: ["a", "config"], line: 2 },
+        ],
+        ["config"],
+      ),
+    ).toThrow(/Circular dependency/);
+  });
+
   it("rejects non-wire provider entries", () => {
     const source = `
 import { defineWire } from "@zwents/cli/wire";
@@ -410,6 +422,24 @@ export default defineWire({
     expect(out).toContain('import createDb from "./db.js";');
     expect(out).toContain(
       'import { createUserService as createUsers } from "./users.js";',
+    );
+  });
+
+  it("sorts multiple named imports from the same module", () => {
+    const graph = parseWireSource(
+      `
+import { defineWire, wire } from "@zwents/cli/wire";
+import { createUsers, createDb } from "./infra.js";
+export default defineWire({
+  db: wire(createDb),
+  users: wire(createUsers, ["db"]),
+});
+`,
+      "/app/src/wire.ts",
+    );
+    const out = emitWireContainer(graph, "/app/src/container.gen.ts");
+    expect(out).toContain(
+      'import { createDb, createUsers } from "./infra.js";',
     );
   });
 

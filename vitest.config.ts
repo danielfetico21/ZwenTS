@@ -20,6 +20,9 @@ export default defineConfig({
         "**/tests/**",
         "**/node_modules/**",
         "**/*.d.ts",
+        // Type-only / re-export barrels (no executable branches).
+        "packages/cli/lib/wire/types.ts",
+        "packages/http/lib/body.ts",
       ],
     },
   },

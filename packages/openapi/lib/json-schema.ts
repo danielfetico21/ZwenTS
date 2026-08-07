@@ -59,9 +59,7 @@ export function normalizeComponentRef(ref: string): string {
   if (shared?.[1]) {
     return `#/components/schemas/${shared[1]}`;
   }
-  /* istanbul ignore next */
   const defs = ref.match(/^#\/(?:\$defs|definitions)\/(.+)$/);
-  /* istanbul ignore next */
   if (defs?.[1]) {
     return `#/components/schemas/${defs[1]}`;
   }

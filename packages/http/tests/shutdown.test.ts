@@ -360,4 +360,28 @@ describe("installProcessSignals", () => {
     expect(app.started).toBe(false);
     uninstall();
   });
+
+  it("fatalErrors stops on uncaughtException", async () => {
+    const kinds: string[] = [];
+    const exits: number[] = [];
+    const app = createApp({ context: {} });
+    await app.start();
+    const uninstall = installProcessSignals(app, {
+      fatalErrors: true,
+      exit: (code) => {
+        exits.push(code);
+      },
+      onFatalError: (_error, kind) => {
+        kinds.push(kind);
+      },
+    });
+
+    process.emit("uncaughtException", new Error("boom"));
+    await new Promise((r) => setTimeout(r, 30));
+
+    expect(kinds).toEqual(["uncaughtException"]);
+    expect(exits).toEqual([1]);
+    expect(app.started).toBe(false);
+    uninstall();
+  });
 });

@@ -40,6 +40,45 @@ describe("readBytesLimited edges", () => {
     ).rejects.toMatchObject({ code: "PAYLOAD_TOO_LARGE" });
   });
 
+  it("swallows reader.cancel rejection when the body exceeds maxBytes", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new Uint8Array(32));
+        controller.close();
+      },
+      cancel() {
+        return Promise.reject(new Error("cancel failed"));
+      },
+    });
+    const request = new Request("http://x", {
+      method: "POST",
+      // @ts-expect-error Node fetch duplex for streaming request bodies
+      duplex: "half",
+      body: stream,
+    });
+    await expect(readBytesLimited(request, 8)).rejects.toMatchObject({
+      code: "PAYLOAD_TOO_LARGE",
+    });
+  });
+
+  it("swallows reader.cancel rejection when the stream errors", async () => {
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.error(new Error("stream boom"));
+      },
+      cancel() {
+        return Promise.reject(new Error("cancel failed"));
+      },
+    });
+    const request = new Request("http://x", {
+      method: "POST",
+      // @ts-expect-error Node fetch duplex for streaming request bodies
+      duplex: "half",
+      body: stream,
+    });
+    await expect(readBytesLimited(request, 100)).rejects.toThrow(/stream boom/);
+  });
+
   it("rejects when signal aborts inside the read race before listen", async () => {
     let aborted = false;
     const signal = {

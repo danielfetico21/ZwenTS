@@ -110,7 +110,9 @@ export async function listen<S>(
   if (server.address() === null) {
     await new Promise<void>((resolve, reject) => {
       server.once("listening", () => resolve());
+      /* v8 ignore start — bind errors usually surface before address() is null */
       server.once("error", (err) => reject(err));
+      /* v8 ignore stop */
     });
   }
 

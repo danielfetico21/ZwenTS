@@ -84,14 +84,13 @@ function findCycle(
       const cycle = dfs(dep);
       if (cycle) return cycle;
     }
-    /* istanbul ignore next */
+    /* v8 ignore start */
     pathKeys.pop();
-    /* istanbul ignore next */
     visiting.delete(key);
-    /* istanbul ignore next */
     return null;
+    /* v8 ignore stop */
   };
 
-  /* istanbul ignore next */
+  /* v8 ignore next */
   return dfs(start) ?? [...remaining, remaining[0]!];
 }

@@ -1,7 +1,7 @@
 import { createApp } from "@zwents/core";
-import { createRoute, route } from "@zwents/schema";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
+import { createRoute, route } from "../index.js";
 
 describe("createRoute()", () => {
   it("pins services while keeping schema inference", async () => {
@@ -23,6 +23,19 @@ describe("createRoute()", () => {
 
     const res = await app.dispatch({ method: "GET", path: "/hi/Ada" });
     expect(res.body).toEqual({ message: "hi Ada" });
+  });
+
+  it("delegates to route() for the returned definition", () => {
+    const typedRoute = createRoute<{ n: number }>();
+    const def = typedRoute({
+      method: "GET",
+      path: "/n",
+      output: z.object({ n: z.number() }),
+      handler: async (ctx) => ({ n: ctx.services.n }),
+    });
+    expect(def.method).toBe("GET");
+    expect(def.path).toBe("/n");
+    expect(def.meta?.schemas?.output).toBeTruthy();
   });
 });
 
