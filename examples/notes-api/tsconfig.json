@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "include": ["*.ts", "lib/**/*.ts"],
+  "exclude": ["dist", "tests"],
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/schema" },
+    { "path": "../../packages/http" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/cli" },
+    { "path": "../../packages/auth" },
+    { "path": "../../packages/security" },
+    { "path": "../../packages/ratelimit" },
+    { "path": "../../packages/idempotency" }
+  ]
+}

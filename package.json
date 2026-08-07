@@ -1,0 +1,39 @@
+{
+  "name": "zwents",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.20.0+sha512.9a6f330a95b66446ea088faf1521405a8a01f07fde7124cc9958dfed52d4bb436737e65b08f85f37b46fcba375092558ac51262b816844b22f63406ed166bfee",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "pnpm -r run build",
+    "typecheck": "tsc -b",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "lint:boundaries": "depcruise \"packages/**/*.{ts,js}\" --config .dependency-cruiser.cjs --exclude \"node_modules|dist\"",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "zwen": "node packages/cli/dist/lib/bin.js",
+    "openapi:example": "pnpm --filter @zwents/example-minimal build && pnpm zwen openapi --app examples/minimal/dist/app.js --out examples/minimal/openapi.json --title ZwenTS-minimal --version 0.1.0",
+    "openapi:check": "pnpm openapi:example && git diff --exit-code -- examples/minimal/openapi.json",
+    "check": "pnpm typecheck && pnpm lint && pnpm lint:boundaries && pnpm test",
+    "docs:dev": "pnpm --filter @zwents/docs dev",
+    "docs:build": "pnpm --filter @zwents/docs build",
+    "docs:preview": "pnpm --filter @zwents/docs preview",
+    "pack:local": "node scripts/pack-local.mjs",
+    "changeset": "changeset"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@types/node": "^24.13.3",
+    "@vitest/coverage-v8": "^4.1.10",
+    "dependency-cruiser": "^16.10.4",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

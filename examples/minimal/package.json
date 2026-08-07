@@ -1,0 +1,21 @@
+{
+  "name": "@zwents/example-minimal",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@zwents/config": "workspace:*",
+    "@zwents/core": "workspace:*",
+    "@zwents/http": "workspace:*",
+    "@zwents/schema": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}

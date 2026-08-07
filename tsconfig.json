@@ -1,0 +1,21 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/schema" },
+    { "path": "./packages/http" },
+    { "path": "./packages/config" },
+    { "path": "./packages/openapi" },
+    { "path": "./packages/test" },
+    { "path": "./packages/cli" },
+    { "path": "./packages/auth" },
+    { "path": "./packages/security" },
+    { "path": "./packages/ratelimit" },
+    { "path": "./packages/idempotency" },
+    { "path": "./packages/otel" },
+    { "path": "./packages/oxlint-plugin" },
+    { "path": "./examples/minimal" },
+    { "path": "./examples/notes-api" },
+    { "path": "./examples/time-tracking" }
+  ]
+}

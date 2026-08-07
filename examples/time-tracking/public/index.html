@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ZwenTS Time</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Sora:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: "#1a2332",
+              mist: "#f4f7fa",
+              line: "#d5dde8",
+              teal: { DEFAULT: "#0f766e", soft: "#ccfbf1", deep: "#115e59" },
+            },
+            fontFamily: {
+              display: ["Sora", "system-ui", "sans-serif"],
+              sans: ["Source Sans 3", "system-ui", "sans-serif"],
+              mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background:
+          radial-gradient(900px 420px at 10% -10%, #ccfbf1aa, transparent 60%),
+          radial-gradient(700px 380px at 100% 0%, #dbeafe88, transparent 55%),
+          #f4f7fa;
+      }
+      .tick {
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen font-sans text-ink antialiased">
+    <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+      <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            ZwenTS <span class="text-teal">Time</span>
+          </p>
+          <p class="mt-1 max-w-md text-sm text-slate-600">
+            Clockify-style tracker — projects, start/stop timer, today’s log.
+            Backend demo on ZwenTS.
+          </p>
+        </div>
+        <div id="session" class="text-right text-sm text-slate-600"></div>
+      </header>
+
+      <!-- Login -->
+      <section
+        id="login-panel"
+        class="mb-8 rounded-2xl border border-line bg-white/80 p-6 shadow-sm backdrop-blur"
+      >
+        <h2 class="font-display text-lg font-semibold">Sign in (demo)</h2>
+        <p class="mt-1 text-sm text-slate-600">
+          Mints a bearer token for a user id. In-memory only — restart clears data.
+        </p>
+        <form id="login-form" class="mt-4 flex flex-wrap gap-3">
+          <input
+            id="user-id"
+            name="userId"
+            required
+            placeholder="ada"
+            value="ada"
+            class="min-w-[12rem] flex-1 rounded-lg border border-line bg-mist px-3 py-2 outline-none ring-teal focus:ring-2"
+          />
+          <button
+            type="submit"
+            class="rounded-lg bg-teal px-4 py-2 font-semibold text-white transition hover:bg-teal-deep"
+          >
+            Get token
+          </button>
+        </form>
+        <p id="login-error" class="mt-2 hidden text-sm text-red-600"></p>
+      </section>
+
+      <div id="app-panel" class="hidden space-y-6">
+        <!-- Timer -->
+        <section
+          class="rounded-2xl border border-line bg-white/90 p-6 shadow-sm backdrop-blur"
+        >
+          <div class="flex flex-wrap items-baseline justify-between gap-3">
+            <h2 class="font-display text-lg font-semibold">Timer</h2>
+            <p id="today-total" class="font-mono text-sm text-slate-600"></p>
+          </div>
+          <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+            <input
+              id="desc"
+              placeholder="What are you working on?"
+              class="flex-1 rounded-lg border border-line bg-mist px-3 py-2.5 outline-none ring-teal focus:ring-2"
+            />
+            <select
+              id="project"
+              class="rounded-lg border border-line bg-mist px-3 py-2.5 outline-none ring-teal focus:ring-2"
+            >
+              <option value="">No project</option>
+            </select>
+          </div>
+          <div class="mt-5 flex flex-wrap items-center gap-4">
+            <p id="clock" class="tick font-mono text-4xl font-medium tracking-tight text-ink">
+              00:00:00
+            </p>
+            <button
+              id="toggle-btn"
+              type="button"
+              class="rounded-lg bg-teal px-5 py-2.5 font-semibold text-white transition hover:bg-teal-deep"
+            >
+              Start
+            </button>
+            <span id="timer-status" class="text-sm text-slate-500"></span>
+          </div>
+        </section>
+
+        <!-- Projects -->
+        <section
+          class="rounded-2xl border border-line bg-white/90 p-6 shadow-sm backdrop-blur"
+        >
+          <h2 class="font-display text-lg font-semibold">Projects</h2>
+          <form id="project-form" class="mt-3 flex flex-wrap gap-2">
+            <input
+              id="project-name"
+              required
+              placeholder="New project name"
+              class="min-w-[12rem] flex-1 rounded-lg border border-line bg-mist px-3 py-2 outline-none ring-teal focus:ring-2"
+            />
+            <input
+              id="project-color"
+              type="color"
+              value="#0f766e"
+              class="h-10 w-12 cursor-pointer rounded border border-line bg-mist"
+              title="Color"
+            />
+            <button
+              type="submit"
+              class="rounded-lg border border-line bg-mist px-4 py-2 font-semibold text-ink hover:bg-white"
+            >
+              Add
+            </button>
+          </form>
+          <ul id="project-list" class="mt-4 divide-y divide-line"></ul>
+        </section>
+
+        <!-- Entries -->
+        <section
+          class="rounded-2xl border border-line bg-white/90 p-6 shadow-sm backdrop-blur"
+        >
+          <h2 class="font-display text-lg font-semibold">Today</h2>
+          <ul id="entry-list" class="mt-4 divide-y divide-line"></ul>
+          <p id="entries-empty" class="mt-2 text-sm text-slate-500">No entries yet.</p>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const API = "";
+      const store = {
+        get token() {
+          return localStorage.getItem("zwents_time_token");
+        },
+        set token(v) {
+          if (v) localStorage.setItem("zwents_time_token", v);
+          else localStorage.removeItem("zwents_time_token");
+        },
+        get userId() {
+          return localStorage.getItem("zwents_time_user");
+        },
+        set userId(v) {
+          if (v) localStorage.setItem("zwents_time_user", v);
+          else localStorage.removeItem("zwents_time_user");
+        },
+      };
+
+      let projects = [];
+      let running = null;
+      let tickTimer = null;
+
+      function fmt(ms) {
+        const s = Math.floor(ms / 1000);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return [h, m, sec].map((n) => String(n).padStart(2, "0")).join(":");
+      }
+
+      function dayBounds() {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        const from = d.getTime();
+        d.setHours(23, 59, 59, 999);
+        return { from, to: d.getTime() };
+      }
+
+      async function api(path, opts = {}) {
+        const headers = {
+          "content-type": "application/json",
+          ...(opts.headers || {}),
+        };
+        if (store.token) headers.authorization = `Bearer ${store.token}`;
+        const res = await fetch(API + path, { ...opts, headers });
+        const text = await res.text();
+        let body = null;
+        try {
+          body = text ? JSON.parse(text) : null;
+        } catch {
+          body = text;
+        }
+        if (!res.ok) {
+          const detail =
+            body && typeof body === "object"
+              ? body.detail || body.title || res.statusText
+              : res.statusText;
+          throw new Error(detail || `HTTP ${res.status}`);
+        }
+        return body;
+      }
+
+      function projectName(id) {
+        if (!id) return "No project";
+        return projects.find((p) => p.id === id)?.name || "Project";
+      }
+
+      function projectColor(id) {
+        return projects.find((p) => p.id === id)?.color || "#94a3b8";
+      }
+
+      function renderSession() {
+        const el = document.getElementById("session");
+        if (store.token && store.userId) {
+          el.innerHTML = `<span class="font-semibold text-ink">${store.userId}</span>
+            <button id="logout" class="ml-2 text-teal underline">Sign out</button>`;
+          document.getElementById("logout").onclick = () => {
+            store.token = null;
+            store.userId = null;
+            location.reload();
+          };
+        } else {
+          el.textContent = "Not signed in";
+        }
+      }
+
+      function renderProjects() {
+        const sel = document.getElementById("project");
+        const current = sel.value;
+        sel.innerHTML =
+          `<option value="">No project</option>` +
+          projects
+            .map(
+              (p) =>
+                `<option value="${p.id}">${escapeHtml(p.name)}</option>`,
+            )
+            .join("");
+        if (current) sel.value = current;
+        if (running?.projectId) sel.value = running.projectId;
+
+        const list = document.getElementById("project-list");
+        list.innerHTML = projects
+          .map(
+            (p) => `<li class="flex items-center justify-between gap-3 py-2.5">
+              <span class="flex items-center gap-2">
+                <span class="inline-block h-3 w-3 rounded-full" style="background:${p.color}"></span>
+                <span class="font-medium">${escapeHtml(p.name)}</span>
+              </span>
+              <button data-del-project="${p.id}" class="text-sm text-slate-500 hover:text-red-600">Delete</button>
+            </li>`,
+          )
+          .join("");
+        list.querySelectorAll("[data-del-project]").forEach((btn) => {
+          btn.onclick = async () => {
+            await api(`/projects/${btn.dataset.delProject}`, { method: "DELETE" });
+            await refresh();
+          };
+        });
+      }
+
+      function renderEntries(items) {
+        const list = document.getElementById("entry-list");
+        const empty = document.getElementById("entries-empty");
+        const stopped = items.filter((e) => !e.running);
+        empty.classList.toggle("hidden", stopped.length > 0);
+        list.innerHTML = stopped
+          .map(
+            (e) => `<li class="flex flex-wrap items-center justify-between gap-2 py-3">
+              <div class="min-w-0">
+                <p class="font-medium truncate">${escapeHtml(e.description || "(no description)")}</p>
+                <p class="text-sm text-slate-500 flex items-center gap-2">
+                  <span class="inline-block h-2 w-2 rounded-full" style="background:${projectColor(e.projectId)}"></span>
+                  ${escapeHtml(projectName(e.projectId))}
+                  · ${new Date(e.startedAt).toLocaleTimeString()}
+                </p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-mono tick text-sm">${fmt(e.durationMs)}</span>
+                <button data-del-entry="${e.id}" class="text-sm text-slate-500 hover:text-red-600">Delete</button>
+              </div>
+            </li>`,
+          )
+          .join("");
+        list.querySelectorAll("[data-del-entry]").forEach((btn) => {
+          btn.onclick = async () => {
+            await api(`/entries/${btn.dataset.delEntry}`, { method: "DELETE" });
+            await refresh();
+          };
+        });
+
+        const total = items.reduce((acc, e) => {
+          if (e.running && running) {
+            return acc + (Date.now() - running.startedAt);
+          }
+          return acc + e.durationMs;
+        }, 0);
+        document.getElementById("today-total").textContent =
+          `Today ${fmt(total)}`;
+      }
+
+      function updateClock() {
+        const clock = document.getElementById("clock");
+        const btn = document.getElementById("toggle-btn");
+        const status = document.getElementById("timer-status");
+        if (running) {
+          clock.textContent = fmt(Date.now() - running.startedAt);
+          btn.textContent = "Stop";
+          btn.classList.remove("bg-teal", "hover:bg-teal-deep");
+          btn.classList.add("bg-red-600", "hover:bg-red-700");
+          status.textContent = "Recording…";
+        } else {
+          clock.textContent = "00:00:00";
+          btn.textContent = "Start";
+          btn.classList.add("bg-teal", "hover:bg-teal-deep");
+          btn.classList.remove("bg-red-600", "hover:bg-red-700");
+          status.textContent = "";
+        }
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      async function refresh() {
+        const { from, to } = dayBounds();
+        const [proj, run, entries] = await Promise.all([
+          api("/projects"),
+          api("/entries/running"),
+          api(`/entries?from=${from}&to=${to}`),
+        ]);
+        projects = proj.items;
+        running = run.entry;
+        if (running) {
+          document.getElementById("desc").value = running.description || "";
+        }
+        renderProjects();
+        renderEntries(entries.items);
+        updateClock();
+        if (tickTimer) clearInterval(tickTimer);
+        tickTimer = setInterval(updateClock, 1000);
+      }
+
+      async function enterApp() {
+        document.getElementById("login-panel").classList.add("hidden");
+        document.getElementById("app-panel").classList.remove("hidden");
+        renderSession();
+        await refresh();
+      }
+
+      document.getElementById("login-form").onsubmit = async (ev) => {
+        ev.preventDefault();
+        const err = document.getElementById("login-error");
+        err.classList.add("hidden");
+        try {
+          const userId = document.getElementById("user-id").value.trim();
+          const data = await api("/auth/token", {
+            method: "POST",
+            body: JSON.stringify({ userId }),
+          });
+          store.token = data.token;
+          store.userId = data.userId;
+          await enterApp();
+        } catch (e) {
+          err.textContent = e.message;
+          err.classList.remove("hidden");
+        }
+      };
+
+      document.getElementById("project-form").onsubmit = async (ev) => {
+        ev.preventDefault();
+        const name = document.getElementById("project-name").value.trim();
+        const color = document.getElementById("project-color").value;
+        await api("/projects", {
+          method: "POST",
+          body: JSON.stringify({ name, color }),
+        });
+        document.getElementById("project-name").value = "";
+        await refresh();
+      };
+
+      document.getElementById("toggle-btn").onclick = async () => {
+        if (running) {
+          await api("/entries/stop", {
+            method: "POST",
+            body: JSON.stringify({}),
+          });
+        } else {
+          const projectId = document.getElementById("project").value || null;
+          const description = document.getElementById("desc").value;
+          await api("/entries/start", {
+            method: "POST",
+            body: JSON.stringify({ projectId, description }),
+          });
+        }
+        await refresh();
+      };
+
+      (async () => {
+        renderSession();
+        if (store.token) {
+          try {
+            await api("/me");
+            await enterApp();
+          } catch {
+            store.token = null;
+            store.userId = null;
+            renderSession();
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>

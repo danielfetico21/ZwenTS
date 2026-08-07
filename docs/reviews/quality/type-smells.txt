@@ -1,0 +1,4 @@
+packages/http/lib/body.ts:197: * Read raw body bytes (any content-type), enforcing `maxBytes`.
+packages/openapi/lib/generate.ts:39:  return (middleware as unknown as Record<
+packages/cli/lib/wire/define.ts:21:   * before any provider runs).
+packages/core/lib/compose.ts:12:  /** Seed values available before any provider runs (e.g. config). */

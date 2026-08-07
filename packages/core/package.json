@@ -1,0 +1,30 @@
+{
+  "name": "@zwents/core",
+  "version": "0.1.0",
+  "description": "Explicit composition, middleware, errors, and lifecycle for ZwenTS",
+  "type": "module",
+  "exports": {
+    ".": {
+      "typescript": "./index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run --config ../../vitest.config.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}

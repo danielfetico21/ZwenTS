@@ -1,0 +1,220 @@
+/**
+ * ZwenTS docs — cool ink + teal accent (not Nest red, not AI purple, not cream).
+ * Reading: B2B framework docs for TypeScript backend engineers.
+ */
+
+:root {
+  --zw-ink: oklch(0.24 0.03 250);
+  --zw-muted: oklch(0.42 0.025 250);
+  --zw-bg: oklch(0.985 0.008 250);
+  --zw-surface: oklch(0.97 0.012 250);
+  --zw-line: oklch(0.88 0.02 250);
+  --zw-accent: oklch(0.52 0.12 210);
+  --zw-accent-soft: oklch(0.94 0.04 210);
+  --zw-accent-ink: oklch(0.32 0.08 210);
+  --zw-code-bg: oklch(0.96 0.015 250);
+
+  --vp-font-family-base: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --vp-c-brand-1: var(--zw-accent);
+  --vp-c-brand-2: oklch(0.45 0.11 210);
+  --vp-c-brand-3: oklch(0.4 0.1 210);
+  --vp-c-brand-soft: var(--zw-accent-soft);
+
+  --vp-c-bg: var(--zw-bg);
+  --vp-c-bg-alt: var(--zw-surface);
+  --vp-c-bg-soft: var(--zw-surface);
+  --vp-c-bg-elv: white;
+
+  --vp-c-text-1: var(--zw-ink);
+  --vp-c-text-2: var(--zw-muted);
+  --vp-c-text-3: oklch(0.55 0.02 250);
+
+  --vp-c-divider: var(--zw-line);
+  --vp-c-gutter: var(--zw-line);
+  --vp-c-border: var(--zw-line);
+
+  --vp-code-bg: var(--zw-code-bg);
+  --vp-button-brand-bg: var(--zw-accent);
+  --vp-button-brand-hover-bg: oklch(0.45 0.11 210);
+  --vp-button-brand-text: white;
+  --vp-button-brand-hover-text: white;
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    120deg,
+    var(--zw-ink) 30%,
+    var(--zw-accent) 100%
+  );
+  --vp-home-hero-image-background-image: radial-gradient(
+    ellipse 80% 60% at 70% 40%,
+    oklch(0.9 0.06 210 / 0.7),
+    transparent 70%
+  );
+}
+
+.dark {
+  --zw-ink: oklch(0.93 0.015 250);
+  --zw-muted: oklch(0.72 0.02 250);
+  --zw-bg: oklch(0.18 0.02 250);
+  --zw-surface: oklch(0.22 0.025 250);
+  --zw-line: oklch(0.32 0.03 250);
+  --zw-accent: oklch(0.72 0.12 210);
+  --zw-accent-soft: oklch(0.28 0.05 210);
+  --zw-code-bg: oklch(0.2 0.025 250);
+
+  --vp-c-bg: var(--zw-bg);
+  --vp-c-bg-alt: var(--zw-surface);
+  --vp-c-bg-soft: var(--zw-surface);
+  --vp-c-bg-elv: oklch(0.2 0.025 250);
+  --vp-c-text-1: var(--zw-ink);
+  --vp-c-text-2: var(--zw-muted);
+  --vp-button-brand-text: oklch(0.16 0.02 250);
+  --vp-button-brand-hover-text: oklch(0.16 0.02 250);
+}
+
+/* Brand wordmark in nav */
+.VPNavBarTitle .title {
+  font-family: "Sora", var(--vp-font-family-base);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.VPNavBarTitle .title::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.55rem;
+  margin-bottom: 0.08rem;
+  vertical-align: middle;
+  border-radius: 2px;
+  background: var(--zw-accent);
+  box-shadow: 0 0 0 3px var(--zw-accent-soft);
+}
+
+/* Home hero */
+.VPHome {
+  background:
+    radial-gradient(
+      ellipse 90% 50% at 10% -10%,
+      oklch(0.9 0.05 210 / 0.55),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 100% 0%,
+      oklch(0.92 0.03 250 / 0.5),
+      transparent 50%
+    ),
+    var(--vp-c-bg);
+}
+
+.dark .VPHome {
+  background:
+    radial-gradient(
+      ellipse 80% 45% at 15% -5%,
+      oklch(0.35 0.08 210 / 0.45),
+      transparent 55%
+    ),
+    var(--vp-c-bg);
+}
+
+.VPHero .name {
+  font-family: "Sora", var(--vp-font-family-base);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  max-width: 14ch;
+}
+
+.VPHero .text {
+  font-family: "Sora", var(--vp-font-family-base);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  max-width: 22ch;
+}
+
+.VPHero .tagline {
+  max-width: 42ch;
+  text-wrap: pretty;
+  color: var(--zw-muted);
+}
+
+.VPFeature {
+  border: 1px solid var(--zw-line) !important;
+  background: color-mix(in oklch, var(--zw-surface) 80%, transparent) !important;
+  transition:
+    border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.VPFeature:hover {
+  border-color: color-mix(in oklch, var(--zw-accent) 45%, var(--zw-line)) !important;
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .VPFeature {
+    transition: none;
+  }
+  .VPFeature:hover {
+    transform: none;
+  }
+}
+
+.VPFeature .title {
+  font-family: "Sora", var(--vp-font-family-base);
+  letter-spacing: -0.02em;
+}
+
+/* Docs content */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-family: "Sora", var(--vp-font-family-base);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.vp-doc p,
+.vp-doc li {
+  text-wrap: pretty;
+  max-width: 72ch;
+}
+
+.vp-doc a {
+  font-weight: 600;
+}
+
+.vp-doc div[class*="language-"] {
+  border: 1px solid var(--zw-line);
+  border-radius: 10px;
+}
+
+/* Soft entrance on home only */
+@keyframes zw-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.VPHome .VPHero {
+  animation: zw-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.VPHome .VPFeatures {
+  animation: zw-rise 0.65s 0.08s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .VPHome .VPHero,
+  .VPHome .VPFeatures {
+    animation: none;
+  }
+}

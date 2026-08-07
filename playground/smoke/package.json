@@ -1,0 +1,25 @@
+{
+  "name": "zwents-playground-smoke",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "start": "node index.mjs",
+    "install:local": "pnpm install --ignore-workspace"
+  },
+  "dependencies": {
+    "@zwents/core": "file:../../.packs/zwents-core-0.1.0.tgz",
+    "@zwents/http": "file:../../.packs/zwents-http-0.1.0.tgz",
+    "@zwents/schema": "file:../../.packs/zwents-schema-0.1.0.tgz",
+    "zod": "^4.4.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@zwents/core": "file:../../.packs/zwents-core-0.1.0.tgz",
+      "@zwents/http": "file:../../.packs/zwents-http-0.1.0.tgz",
+      "@zwents/schema": "file:../../.packs/zwents-schema-0.1.0.tgz"
+    }
+  }
+}

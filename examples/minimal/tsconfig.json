@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "include": ["*.ts"],
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/schema" },
+    { "path": "../../packages/http" },
+    { "path": "../../packages/config" }
+  ]
+}

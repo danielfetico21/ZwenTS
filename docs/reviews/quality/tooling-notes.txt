@@ -1,0 +1,2 @@
+eslint-plugin-sonarjs: not installed (repo uses oxlint, not eslint)
+depcheck: skipped; knip covers unused deps/exports better for monorepos

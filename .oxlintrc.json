@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "node", "import", "vitest", "oxc"],
+  "jsPlugins": [
+    {
+      "name": "zwents",
+      "specifier": "./packages/oxlint-plugin/index.ts"
+    }
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "typescript/no-wrapper-object-types": "error",
+    "zwents/no-reflect-metadata": "error",
+    "zwents/no-decorators": "error",
+    "zwents/require-route-output": "warn"
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/*.gen.ts",
+    "coverage/**",
+    "node_modules/**",
+    "packages/oxlint-plugin/**"
+  ]
+}

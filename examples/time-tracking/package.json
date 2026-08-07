@@ -1,0 +1,24 @@
+{
+  "name": "@zwents/example-time-tracking",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false",
+    "start": "ALLOW_DEMO_AUTH=1 node dist/main.js",
+    "dev": "pnpm build && pnpm start"
+  },
+  "dependencies": {
+    "@zwents/auth": "workspace:*",
+    "@zwents/config": "workspace:*",
+    "@zwents/core": "workspace:*",
+    "@zwents/http": "workspace:*",
+    "@zwents/schema": "workspace:*",
+    "@zwents/security": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}

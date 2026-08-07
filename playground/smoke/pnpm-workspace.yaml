@@ -1,0 +1,3 @@
+# Own workspace root so parent monorepo workspace is not used.
+packages:
+  - "."

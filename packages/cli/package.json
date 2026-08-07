@@ -1,0 +1,43 @@
+{
+  "name": "@zwents/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "zwen": "./dist/lib/bin.js"
+  },
+  "exports": {
+    ".": {
+      "typescript": "./index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./wire": {
+      "typescript": "./wire.ts",
+      "types": "./dist/wire.d.ts",
+      "import": "./dist/wire.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@typescript/typescript6": "^6.0.2",
+    "@zwents/core": "workspace:*",
+    "@zwents/openapi": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@zwents/schema": "workspace:*",
+    "zod": "^4.4.3"
+  }
+}

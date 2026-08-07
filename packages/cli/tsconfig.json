@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "incremental": true,
+    "rootDir": ".",
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "include": ["index.ts", "wire.ts", "lib/**/*.ts"],
+  "exclude": ["dist", "tests"],
+  "references": [
+    { "path": "../core" },
+    { "path": "../openapi" }
+  ]
+}

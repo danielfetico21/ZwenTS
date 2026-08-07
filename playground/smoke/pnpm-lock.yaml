@@ -1,0 +1,81 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+overrides:
+  '@zwents/core': file:../../.packs/zwents-core-0.0.0.tgz
+  '@zwents/http': file:../../.packs/zwents-http-0.0.0.tgz
+  '@zwents/schema': file:../../.packs/zwents-schema-0.0.0.tgz
+
+importers:
+
+  .:
+    dependencies:
+      '@zwents/core':
+        specifier: file:../../.packs/zwents-core-0.0.0.tgz
+        version: file:../../.packs/zwents-core-0.0.0.tgz
+      '@zwents/http':
+        specifier: file:../../.packs/zwents-http-0.0.0.tgz
+        version: file:../../.packs/zwents-http-0.0.0.tgz(hono@4.13.1)
+      '@zwents/schema':
+        specifier: file:../../.packs/zwents-schema-0.0.0.tgz
+        version: file:../../.packs/zwents-schema-0.0.0.tgz
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+
+packages:
+
+  '@hono/node-server@2.1.0':
+    resolution: {integrity: sha512-XovyyCCnBzW+zKu+z/zq8hwNs4KOR5rEMAOxo2f40Q5xoOI37IMm6MIg2COOUtUApo0i6850MTBKH2u4QLGIqg==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      hono: ^4
+
+  '@zwents/core@file:../../.packs/zwents-core-0.0.0.tgz':
+    resolution: {integrity: sha512-2HikarWgYgQfWHFYObQdmiNW6wFDtRo4KcD6WML0fcG8P638hiITICxcJrkdSUtkoJbjCavSKa+ZpBm+3u+Sjg==, tarball: file:../../.packs/zwents-core-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.0.0'}
+
+  '@zwents/http@file:../../.packs/zwents-http-0.0.0.tgz':
+    resolution: {integrity: sha512-ld551jw1p0i17nGYVtaA2ds5/OMyGNnRIYqhkr8nCNPFD7NV6JxFHSMQ/J9uuALBLLjoOh9IC0vhdbfVLmG5AQ==, tarball: file:../../.packs/zwents-http-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.0.0'}
+
+  '@zwents/schema@file:../../.packs/zwents-schema-0.0.0.tgz':
+    resolution: {integrity: sha512-ojeTy/Xdckpj5v3Beqz4ph5OoNZbaVDzCKiRP9+2LZDLa26tQYivfRfdVbhY3O7RmPRDD4M2S904jzzCUE4XVw==, tarball: file:../../.packs/zwents-schema-0.0.0.tgz}
+    version: 0.0.0
+    engines: {node: '>=22.0.0'}
+
+  hono@4.13.1:
+    resolution: {integrity: sha512-kdJoFVv2xmayw6cY09H7AbMJMt8Jn5jdlEdXsP7AGBdF2DIptVlKlOLKXP41yPip4/a3yQPv9gVcJYI8YY04dw==}
+    engines: {node: '>=16.9.0'}
+
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
+snapshots:
+
+  '@hono/node-server@2.1.0(hono@4.13.1)':
+    dependencies:
+      hono: 4.13.1
+
+  '@zwents/core@file:../../.packs/zwents-core-0.0.0.tgz': {}
+
+  '@zwents/http@file:../../.packs/zwents-http-0.0.0.tgz(hono@4.13.1)':
+    dependencies:
+      '@hono/node-server': 2.1.0(hono@4.13.1)
+      '@zwents/core': file:../../.packs/zwents-core-0.0.0.tgz
+    transitivePeerDependencies:
+      - hono
+
+  '@zwents/schema@file:../../.packs/zwents-schema-0.0.0.tgz':
+    dependencies:
+      '@zwents/core': file:../../.packs/zwents-core-0.0.0.tgz
+      zod: 4.4.3
+
+  hono@4.13.1: {}
+
+  zod@4.4.3: {}

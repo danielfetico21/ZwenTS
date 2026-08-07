@@ -1,0 +1,32 @@
+{
+  "name": "@zwents/security",
+  "version": "0.1.0",
+  "description": "CORS, security headers, and request-id middleware for ZwenTS",
+  "type": "module",
+  "exports": {
+    ".": {
+      "typescript": "./index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@zwents/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@zwents/ratelimit",
+  "version": "0.1.0",
+  "description": "Pluggable fixed-window rate limiting middleware for ZwenTS",
+  "type": "module",
+  "exports": {
+    ".": {
+      "typescript": "./index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@zwents/core": "workspace:*",
+    "@zwents/security": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}

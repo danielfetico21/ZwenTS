@@ -1,0 +1,28 @@
+{
+  "name": "@zwents/example-notes-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "gen:wire": "zwen gen:wire --from ./wire.ts --out ./lib/container.gen.ts",
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty false",
+    "start": "node dist/main.js",
+    "test": "pnpm -w exec vitest run examples/notes-api/tests"
+  },
+  "dependencies": {
+    "@zwents/cli": "workspace:*",
+    "@zwents/auth": "workspace:*",
+    "@zwents/config": "workspace:*",
+    "@zwents/core": "workspace:*",
+    "@zwents/http": "workspace:*",
+    "@zwents/idempotency": "workspace:*",
+    "@zwents/ratelimit": "workspace:*",
+    "@zwents/schema": "workspace:*",
+    "@zwents/security": "workspace:*",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3"
+  }
+}
